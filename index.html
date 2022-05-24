@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input
+      type="button"
+      value="Upload"
+      class="d-btn bgBlue"
+      onclick="onUpload();"
+    />
+    <script>
+      function onUpload() {
+        if (!dcsObject || !imageViewer) return;
+        if (imageViewer.image.getCount() === 0) {
+          alert('Please grab an image first.');
+
+          return;
+        }
+
+        var counter,
+          url = getCurPagePath() + 'upload',
+          fileName = new Date().getMilliseconds() + '.jpg',
+          imageType = imageViewer.io.EnumImageType.JPEG,
+          bMultiImages = false,
+          imageIndexArray = [];
+        if (bMultiImages) {
+          for (counter = 0; counter < imageViewer.image.getCount(); counter++)
+            imageIndexArray.push(counter);
+        } else imageIndexArray.push(imageViewer.image.getIndex());
+        imageViewer.io.setHTTPFormFields({
+          fileName: fileName,
+        });
+
+        imageViewer.io.httpUploadAsync(
+          url,
+          imageIndexArray,
+          imageType,
+          onUploadSuccess,
+          onUploadFailure
+        );
+      }
+    </script>
+  </body>
+</html>
